@@ -66,75 +66,74 @@ def precios_unitarios(cargamento, precios):
 
 #Funcion para realizar compras en los catalogos########################################################################################
 def compras(cargamento, su_stock, su_precios, inventario, cantidad, precio, Billetera):
-    print("Sus opciones disponibles:")
-    print("")
-    print("1) Comprar")
-    print("2) Volver")
-    print("")
-    hacer_compra = False
-    buscando = 0 #Acumula las veces que el primer for no detecta lo buscado
-    opcion = int(input("Ingrese (1) o (2) para avanzar: "))
-    while opcion != 1 and opcion != 2:
-        opcion = int(input("Solo es valido el ingreso de (1) y (2): "))
-    print("")
-    if opcion == 1:
-        hacer_compra = True
-    else: 
-        print("Ok, se le regresara al menu anterior")
-    while hacer_compra == True:
-        hacer_compra = False
-        mostrar_productos(cargamento, su_stock, su_precios)
+    modo_compra = True
+    while modo_compra == True:
+        encontrado = True
         print("")
-        producto = input("Escriba el nombre del producto a comprar (Primera letra en Mayusculas): ")
+        print("Sus opciones disponibles:")
         print("")
-        #Recorre la lista en busca del producto
-        for recorrer in range(len(cargamento)):
-            #Si lo encuentra permite la compra
-            if producto == cargamento[recorrer] and su_stock[recorrer] > 0:
-                producto_cargamento = cargamento[recorrer]
-                stock_producto = int(input("Ingrese la cantidad a comprar: "))
-                while stock_producto > su_stock[recorrer] and stock_producto <= 0:
-                    stock_producto = int(input("Ingrese una cantidad valida: "))
-                precio_total = su_precios[recorrer] * stock_producto
-                print("Precio total de la compra:", precio_total)
-
-                if Billetera[0] >= precio_total and su_stock[recorrer] > 0:
-                    guardado = False
-                    for comprobar in range(len(inventario)):
-                        if inventario[comprobar] == producto_cargamento:
-                            producto_inventario = comprobar
-                            guardado = True
-                    if guardado == True:
-                        cantidad[producto_inventario] += stock_producto
-                        su_stock[recorrer] -= stock_producto
-                    else:
-                        inventario.append(cargamento[recorrer])
-                        cantidad.append(stock_producto)
-                        precio.append(su_precios[recorrer])
-                        su_stock[recorrer] -= stock_producto
-                        Billetera[0] -= precio_total
-                else:
-                    print("Su saldo es insuficiente para realizar esta compra")
-                    print("")
-            else:
-                buscando += 1
-            if buscando == 5:
-                print("No se encontro el producto ingresado")
-            hacer_compra = True
-        print("¿Desea seguir comprando?")
-        opcion = int(input("Marque (1) para continuar o (2) para salir: "))
-        while opcion != 1 and opcion != 2:
-            opcion = int(input("Solo son validos los numeros 1 y 2: "))
+        print("1) Comprar")
+        print("2) Volver")
+        print("")
+        opcion = input("Ingrese (1) o (2) para avanzar: ")
+        while opcion != "1" and opcion != "2":
+            opcion = input("Solo es valido el ingreso de (1) o (2): ")
             print("")
-        print("")
-        if opcion == 1:
-            hacer_compra = True
+        if opcion == "1":
+            mostrar_productos(cargamento, su_stock, su_precios)
+            print("")
+            producto = input("Escriba el nombre del producto a comprar (Primera letra en Mayusculas): ")
+            print("")
+            for recorrer in range(len(cargamento)):
+                if producto == cargamento[recorrer] and su_stock[recorrer] > 0:
+                    producto_cargamento = cargamento[recorrer]
+                    stock_producto = int(input("Ingrese la cantidad a comprar: "))
+                    while stock_producto > su_stock[recorrer] and stock_producto <= 0:
+                        stock_producto = int(input("Ingrese una cantidad valida: "))
+                    precio_total = su_precios[recorrer] * stock_producto
+                    print("Precio total de la compra:", precio_total)
+                    if Billetera[0] >= precio_total:
+                        producto_guardado = False
+                        for comprobar in range(len(inventario)):
+                            if inventario[comprobar] == producto_cargamento:
+                                producto_inventario = comprobar
+                                producto_guardado = True
+                        if producto_guardado == True:
+                            cantidad[producto_inventario] += stock_producto
+                            su_stock[recorrer] -= stock_producto
+                            Billetera[0] -= precio_total
+                            billetera_pago = Billetera
+                            print("")
+                            print("Billetera tras pago: ", billetera_pago)
+                            print("")
+                        else:
+                            inventario.append(cargamento[recorrer])
+                            cantidad.append(stock_producto)
+                            precio.append(su_precios[recorrer])
+                            su_stock[recorrer] -= stock_producto
+                            Billetera[0] -= precio_total
+                            billetera_pago = Billetera
+                            print("")
+                            print("Billetera tras pago: ", billetera_pago)
+                            print("")
+                    else:
+                        print("")
+                        print("Su saldo es insuficiente para realizar esta compra")
+                        print("")
+                    encontrado = True
+                else:
+                    encontrado = False
+            if encontrado == False:
+                print("")
+                print("Se ha interrumpido la accion, es posible que el producto ingresado no sea valido o no cuente con stock")
+                print("")
+            modo_compra = True
         else: 
-            print("Ok, se le regresara al menu anterior")
-            hacer_compra = False  
-    print("")
-    print("Billetera tras pago: ", Billetera)
-    print("Se regresara a la fase anterior")
+            print("")
+            print("Volviendo al menu anterior...")
+            print("")
+            modo_compra = False            
+        print("")
 
 def borrado_de_catalogo(cargamento, su_stock, su_precios):
     maximo = len(cargamento)
@@ -191,11 +190,11 @@ def tienda(inventario, cantidad, precio, Billetera):
         print("3) Escolar")
         print("4) Volver al menu anterior")
         print("")
-        opcion = int(input("Coloque el numero de la opcion de su interes: "))
-        while opcion != 1 and opcion != 2 and opcion != 3 and opcion != 4:
-            opcion = int(input("Solo son validos los numeros (1), (2), (3) y (4): "))
+        opcion = input("Coloque el numero de la opcion de su interes: ")
+        while opcion != "1" and opcion != "2" and opcion != "3" and opcion != "4":
+            opcion = input("Solo son validos los numeros (1), (2), (3) y (4): ")
             print("")
-        if opcion == 1:
+        if opcion == "1":
             print("")
             print("Catalogo de construccion:")
             construccion(cargamento, su_stock)
@@ -206,7 +205,7 @@ def tienda(inventario, cantidad, precio, Billetera):
             print("Billetera tras pago: ", Billetera)
             print("")
             modo_tienda = True
-        elif opcion == 2:
+        elif opcion == "2":
             print("")
             print("Catalogo de frutas:")
             frutas(cargamento, su_stock)
@@ -216,7 +215,7 @@ def tienda(inventario, cantidad, precio, Billetera):
             borrado_de_catalogo(cargamento, su_stock, su_precios)
             print("")
             modo_tienda = True
-        elif opcion == 3:
+        elif opcion == "3":
             print("")
             print("Catalogo de escolar:")
             escolar(cargamento, su_stock)
@@ -307,8 +306,8 @@ def main():
         else:
             print("")
             print("Entendido, saliendo de la tienda...")
+            print("")
+            print("¡Hasta la proxima!")
             programa = False
-    print("")
-    print("¡Hasta la proxima!")
 
 main()
