@@ -111,7 +111,6 @@ def venta_stock(inventario, cantidad, precio, Billetera):
             print("Volviendo al menu anterior...")
             print("")
             stock_para_vender = False
-
 #----------------Creacion de catalogos----------------------
 def construccion(productos, stock):
     cargamento = ["Madera", "Concreto", "Cemento", "Tuberia", "Ladrillo"]
