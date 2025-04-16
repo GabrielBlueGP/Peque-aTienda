@@ -1,7 +1,7 @@
 import random
 
 def linea_texto(): #Pone una linea para separar algunas secciones
-    print("###################################################################")
+    print("#######################################################################################")
 
 def cantidad_stock(stock): #Definir la cantidad de stock
     cantidad = random.randint(1, 100)
@@ -23,7 +23,6 @@ def mostrar_productos(inventario, cantidad, precio): #Mostrar productos
 def valor_inventario(inventario, cantidad, precio): #Mostrar valor total de todos los productos del inventario
     valor_por_stock = 0
     valor_total = 0
-    linea_texto()
     for ver in range(len(inventario)):
         valor_por_stock = precio[ver] * cantidad[ver]
         valor_total += valor_por_stock
@@ -61,7 +60,6 @@ def plus_de_venta(precio_total):
 def venta_stock(inventario, cantidad, precio, Billetera):
     stock_para_vender = True
     precio_vendido = 0
-    linea_texto()
     while stock_para_vender == True:
         encontrado = False
         print("")
@@ -147,19 +145,23 @@ def precios_unitarios(cargamento, precios):
 
 def compras(cargamento, su_stock, su_precios, inventario, cantidad, precio, Billetera): #Realizar compras en los catalogos
     modo_compra = True
-    linea_texto()
     while modo_compra == True:
         encontrado = False
         print("")
-        print("Sus opciones disponibles:")
+        linea_texto()
         print("")
-        print("1) Comprar")
+        print("Opciones disponibles del catalogo:")
+        print("")
+        print("1) Comprar un producto")
         print("s) Volver")
         print("")
         opcion = input("Ingrese (1) o (s) para avanzar: ")
+        print("")
         while opcion != "1" and opcion != "s":
             opcion = input("Solo es valido el ingreso de (1) o (s): ")
             print("")
+        linea_texto()
+        print("")
         if opcion == "1":
             mostrar_productos(cargamento, su_stock, su_precios)
             print("")
@@ -169,8 +171,10 @@ def compras(cargamento, su_stock, su_precios, inventario, cantidad, precio, Bill
                 if producto == cargamento[recorrer] and su_stock[recorrer] > 0: #Si se encuentra el producto y su stock es mayor a 0
                     producto_cargamento = cargamento[recorrer]
                     stock_producto = int(input("Ingrese la cantidad a comprar: "))
+                    print("")
                     while stock_producto > su_stock[recorrer] and stock_producto <= 0:
                         stock_producto = int(input("Ingrese una cantidad valida: "))
+                        print("")
                     precio_total = su_precios[recorrer] * stock_producto
                     print("Precio total de la compra:", precio_total)
                     if Billetera[0] >= precio_total: # Si el contenido de billetera es mayor al precio total del producto
@@ -204,17 +208,19 @@ def compras(cargamento, su_stock, su_precios, inventario, cantidad, precio, Bill
                         print("Su saldo es insuficiente para realizar esta compra")
                         print("")
             if encontrado == True: #Si se logra realizar la compra
+                linea_texto()
                 print("")
                 print("¡Se pudo realizar con exito la compra!")
-                print("")
             else:
+                linea_texto()
                 print("")
                 print("No se pudo realizar la accion, posibles motivos:")
                 print("-Saldo insufiente")
                 print("-Nombre de producto erroneo")
                 print("-Producto desconocido")
                 print("-Producto con stock agotado")
-                print("")            
+                print("")
+                print("Verifique su billetera o si el producto buscado esta registrado o si pertenece a otro catalogo")
         else:
             print("")
             print("Volviendo al menu anterior...")
@@ -231,8 +237,8 @@ def borrado_de_catalogo(cargamento, su_stock, su_precios): #Borra las listas de 
 
 def gestion_inventario(inventario, cantidad, precio, Billetera): #Menu del inventario
     modo_inventario = True
-    linea_texto()
     while modo_inventario == True:
+        linea_texto()
         print("")
         print("Sus opciones con su inventario son las siguientes:")
         print("")
@@ -242,8 +248,11 @@ def gestion_inventario(inventario, cantidad, precio, Billetera): #Menu del inven
         print("s) Volver al menu principal")
         print("")
         opciones = input("Ingrese la opcion de su interes: ")
+        print("")
+        linea_texto()
         while opciones != "1" and opciones != "2" and opciones != "3" and opciones != "s":
-            opciones = input("Solo es valido el ingreso de (1) (2) (3) y (s): ")
+            print("")
+            opciones = input("Solo es valido el ingreso de (1) (2) (3) y (s): ")   
         if opciones == "1":
             if len(inventario) > 0:       
                 print("")
@@ -283,10 +292,9 @@ def tienda(inventario, cantidad, precio, Billetera): #Menu de la tienda
     su_stock = []
     su_precios = []
     modo_tienda = True
-    linea_texto()
-    print("")
-    print("Bienvenido a la tienda, aqui podra visualizar los productos disponibles por catalogo")
     while modo_tienda == True:
+        linea_texto()
+        print("")
         print("Catalogos disponibles para su compra:")
         print("")
         print("1) Construccion")
@@ -346,13 +354,18 @@ def gestion_Billetera(Billetera): #Menu de la Billetera
             opciones = input("Solo son validos (1) o (s): ")
         if opciones == "1":
             print("")
+            linea_texto()
+            print("")
             print("El saldo actual de su billetera es de:", dinero_actual,"$")
             print("")
             print("Si quiere aumentarlo agregue sus propios montos o venda productos de su inventario")
+            print("")
         elif opciones == "2":
             print("")
+            linea_texto()
+            print("")
             Dinero = int(input("Ingrese el monto inicial de su Billetera: "))
-            while Dinero > 3000 and Dinero < 500:
+            while  Dinero < 500 or Dinero > 3000:
                 print("El importe permitido para ingresar es de 500$ - 3000$")
                 print("")
                 Dinero = int(input("Ingrese un monto valido: "))
@@ -361,10 +374,10 @@ def gestion_Billetera(Billetera): #Menu de la Billetera
             print("")
             print("Se agregaron:", Dinero,"$ a su billetera")
             print("Su billetera cuenta con:", dinero_actual,"$")
+            print("")
         else:
             print("")
             print("Volviendo al menu principal...")
-            print("")
             modo_billetera = False
 
 def main(): #Ejecuta el menu principal del programa
@@ -373,6 +386,11 @@ def main(): #Ejecuta el menu principal del programa
     precio = []
     Billetera = [0]
     programa = True
+    linea_texto()
+    print("")
+    print("¡Bienvenido al programa de la tienda!")
+    print("Sientase libre de probar nuestros servicios")
+    print("")
     while programa == True:
         programa = False
         linea_texto()
@@ -399,7 +417,9 @@ def main(): #Ejecuta el menu principal del programa
             print("")
             programa = True
         elif opciones == "3":
+            print("")
             gestion_inventario(inventario, cantidad, precio, Billetera)
+            print("")
             programa = True
         else:
             print("")
@@ -408,6 +428,9 @@ def main(): #Ejecuta el menu principal del programa
             print("Entendido, saliendo de la tienda...")
             print("")
             print("¡Hasta la proxima!")
+            print("")
+            linea_texto()
+            print("")
             programa = False
 
 main()
